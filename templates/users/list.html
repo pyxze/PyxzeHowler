@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Hello {{ session['username'] }}!!!</h1>
+    {% for user in users %}
+      <p>
+        {{ user.email }}
+      </p>
+    {% endfor %}
+{% endblock %}

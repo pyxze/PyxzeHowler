@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if session.user_id %}
+
+{{ session.user_id }}
+
+<a href="logout">Logout</a>
+
+<form method="POST" action="/">
+    <input type="text" name="howl">
+    <input type="submit" value="Submit">
+</form>
+
+{% else %}
+
+<a href="login">Login</a>
+
+{% endif %}
+
+    {% for howl in howls %}
+      <p>
+        {{ howl.howl }}<br />Posted at <a href="/howl/{{ howl.id }}">{{ howl.created_at }}</a> by <a href="{{ howl.user }}">{{ howl.user }}</a>
+      </p>
+    {% endfor %}
+
+{% endblock %}

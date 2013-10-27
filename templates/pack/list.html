@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{{ test }}
+
+    {% for howl in howls %}
+      <p>
+        {{ howl.howl }} <a href="/howl/{{ howl.id }}">howl</a> - <a href="{{ howl.user }}">{{ howl.user }}</a>
+      </p>
+    {% endfor %}
+
+{% endblock %}

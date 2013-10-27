@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {{ user.username }}
+    {% for howl in user.howls %}
+      <p>
+        {{ howl.howl }}
+      </p>
+    {% endfor %}
+{% endblock %}

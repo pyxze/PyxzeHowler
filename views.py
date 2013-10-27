@@ -8,6 +8,15 @@ from wtforms import Form, TextField, PasswordField, validators
 from flask.ext.security import Security, MongoEngineUserDatastore, \
     UserMixin, RoleMixin, login_required
 
+from flask_security.forms import RegisterForm
+
+class ExtendedRegisterForm(RegisterForm):
+    first_name = TextField('First Name', [Required()])
+    last_name = TextField('Last Name', [Required()])
+
+security = Security(app, user_datastore,
+         register_form=ExtendedRegisterForm)
+
 class LoginForm(Form):
     username = TextField('Username', [validators.Required()])
     password = PasswordField('Password', [validators.Required()])

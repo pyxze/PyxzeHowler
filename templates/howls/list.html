@@ -1,5 +1,20 @@
 {% extends "base.html" %}
 
+{% block page_header %}
+
+	{% if session.user_id %}
+
+	<form method="POST" action="/">
+	    <input type="text" name="howl">
+	    <input type="submit" value="Submit">
+	</form>
+
+	{% else %}
+
+	{% endif %}
+
+{% endblock %}
+
 {% block content %}
 
     {% for howl in howls %}

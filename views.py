@@ -11,9 +11,19 @@ from flask.ext.security import Security, MongoEngineUserDatastore, \
 from flask_security.forms import RegisterForm
 
 class ExtendedRegisterForm(RegisterForm):
-    username = TextField('Username', [validators.Required()])
+    username = TextField('Username', [validators.Required(), validators.Regexp(r'[a-zA-Z0-9]{6,50}', message="Username must be at least six (6) characters using letters or numbers only.")])
 
 users = Blueprint('users', __name__, template_folder='templates')
+
+# from http://stackoverflow.com/questions/15060849/not-getting-signal-from-flask-security
+
+from flask.ext.security.signals import user_registered
+
+@user_registered.connect_via(app)
+def user_registered_sighandler(sender, **extra):
+    user = extra['user']
+    pack = Pack(user=user)
+    pack.save()
 
 class UserListView(MethodView):
 
@@ -23,37 +33,41 @@ class UserListView(MethodView):
 
 class UserDetailView(MethodView):
 
-    decorators = [login_required]
+    # decorators = [login_required]
 
     def get(self, username):
-        howler = User.objects.get(id=session['user_id'])
-	pack = Pack.objects.get(user=howler)
         user = User.objects.get_or_404(username=username)
-	if user in pack.howlers:
-	    verb = "Remove from your pack!"
-	else:
-	    verb = "Add to your pack!"
-	if str(session['user_id']) == str(user.id):
-	    me = True
-	else:
-	    me = False
-        return render_template('users/detail.html', user=user, me=me, verb=verb)
+        if hasattr(session, 'user_id'):
+            howler = User.objects.get(id=session['user_id'])
+            pack = Pack.objects.get(user=howler)
+            if user in pack.howlers:
+        	   verb = "Remove from your pack!"
+            else:
+        	   verb = "Add to your pack!"
+            if str(session['user_id']) == str(user.id):
+        	   show_pack_button = False
+            else:
+        	   show_pack_button = True
+            return render_template('users/detail.html', user=user, show_pack_button=show_pack_button, verb=verb)
+        else:
+            show_pack_button = False
+        return render_template('users/detail.html', user=user, show_pack_button=show_pack_button)
 
     def post(self, username):
         howler = User.objects.get(id=session['user_id'])
-	pack = Pack.objects.get(user=howler)
+    	pack = Pack.objects.get(user=howler)
         user = User.objects.get_or_404(username=username)
-	if user in pack.howlers:
-	    pack.howlers.remove(user)
-	    verb = "Add to your pack!"
-	else:
-	    pack.howlers.append(user)
-	    verb = "Remove from your pack!"
-	pack.save()
-	if str(session['user_id']) == str(user.id):
-	    me = True
-	else:
-	    me = False
+    	if user in pack.howlers:
+    	    pack.howlers.remove(user)
+    	    verb = "Add to your pack!"
+    	else:
+    	    pack.howlers.append(user)
+    	    verb = "Remove from your pack!"
+    	pack.save()
+    	if str(session['user_id']) == str(user.id):
+    	    me = True
+    	else:
+    	    me = False
         return render_template('users/detail.html', user=user, me=me, verb=verb)
 
 howls = Blueprint('howls', __name__, template_folder='templates')

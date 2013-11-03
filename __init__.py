@@ -13,6 +13,7 @@ app.config["MONGODB_SETTINGS"] = {'DB': "howler"}
 app.config["SECRET_KEY"] = "KeepThisS3cr3t"
 
 app.config["SECURITY_REGISTERABLE"] = True
+app.config["SECURITY_SEND_REGISTER_EMAIL"] = False
 
 db = MongoEngine(app)
 

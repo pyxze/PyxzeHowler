@@ -11,25 +11,20 @@
 
     {%- block topbar -%}
     <div class="topbar">
-        <h2>
-            <a href="/" class="brand">Howler</a>
-        </h2>
 
-	{% if session.user_id %}
+      <h2>
+          <a href="/" class="brand">Howler</a>
+      </h2>
 
-	<a href="logout">Logout</a>
+      {% if session.user_id %}
 
-	<form method="POST" action="/">
-	    <input type="text" name="howl">
-	    <input type="submit" value="Submit">
-	</form>
+      <a href="logout">Logout</a><br /><br />
 
-	{% else %}
+      {% else %}
 
-	<a href="login">Login</a> / <a href="register">Register</a>
+      <a href="login">Login</a> / <a href="register">Register</a><br /><br />
 
-	{% endif %}
-
+      {% endif %}
 
     </div>
     {%- endblock -%}
@@ -41,5 +36,6 @@
       </div>
     </div>
     {% block js_footer %}{% endblock %}
+
   </body>
 </html>

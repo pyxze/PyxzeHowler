@@ -11,7 +11,7 @@ from flask.ext.security import Security, MongoEngineUserDatastore, \
 from flask_security.forms import RegisterForm
 
 class ExtendedRegisterForm(RegisterForm):
-    username = TextField('Username', [validators.Required(), validators.Regexp(r'[a-zA-Z0-9]{6,50}', message="Username must be at least six (6) characters using letters or numbers only.")])
+    username = TextField('Username', [validators.Required(), validators.Regexp(r'[a-zA-Z0-9]{5,50}', message="Username must be at least five (5) characters using letters or numbers only.")])
 
 users = Blueprint('users', __name__, template_folder='templates')
 
@@ -37,7 +37,7 @@ class UserDetailView(MethodView):
 
     def get(self, username):
         user = User.objects.get_or_404(username=username)
-        if hasattr(session, 'user_id'):
+        if 'user_id' in session:
             howler = User.objects.get(id=session['user_id'])
             pack = Pack.objects.get(user=howler)
             if user in pack.howlers:
@@ -51,7 +51,7 @@ class UserDetailView(MethodView):
             return render_template('users/detail.html', user=user, show_pack_button=show_pack_button, verb=verb)
         else:
             show_pack_button = False
-        return render_template('users/detail.html', user=user, show_pack_button=show_pack_button)
+            return render_template('users/detail.html', user=user, show_pack_button=show_pack_button)
 
     def post(self, username):
         howler = User.objects.get(id=session['user_id'])
@@ -59,16 +59,10 @@ class UserDetailView(MethodView):
         user = User.objects.get_or_404(username=username)
     	if user in pack.howlers:
     	    pack.howlers.remove(user)
-    	    verb = "Add to your pack!"
     	else:
     	    pack.howlers.append(user)
-    	    verb = "Remove from your pack!"
     	pack.save()
-    	if str(session['user_id']) == str(user.id):
-    	    me = True
-    	else:
-    	    me = False
-        return render_template('users/detail.html', user=user, me=me, verb=verb)
+        return redirect('/user/' + username)
 
 howls = Blueprint('howls', __name__, template_folder='templates')
 

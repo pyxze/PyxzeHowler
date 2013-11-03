@@ -21,7 +21,7 @@ class User(db.Document, UserMixin):
     howls = ListField(ReferenceField('Howl'))
 
     def __unicode__(self):
-        return self.email
+        return self.username
 
 class Pack(db.Document):
     user = ReferenceField(User)

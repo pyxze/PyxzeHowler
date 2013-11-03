@@ -2,22 +2,35 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>My Tumblelog</title>
-    <link href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.css" rel="stylesheet">
-    <style>.content {padding-top: 80px;}</style>
+    <title>Howler</title>
+    <link href="//cdn.jsdelivr.net/foundation/4.3.2/css/foundation.min.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
   </head>
 
   <body>
 
     {%- block topbar -%}
     <div class="topbar">
-      <div class="fill">
-        <div class="container">
-          <h2>
-              <a href="/" class="brand">My Tumblelog</a> <small>Starring Flask, MongoDB and MongoEngine</small>
-          </h2>
-        </div>
-      </div>
+        <h2>
+            <a href="/" class="brand">Howler</a>
+        </h2>
+
+	{% if session.user_id %}
+
+	<a href="logout">Logout</a>
+
+	<form method="POST" action="/">
+	    <input type="text" name="howl">
+	    <input type="submit" value="Submit">
+	</form>
+
+	{% else %}
+
+	<a href="login">Login</a> / <a href="register">Register</a>
+
+	{% endif %}
+
+
     </div>
     {%- endblock -%}
 

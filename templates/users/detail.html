@@ -1,10 +1,20 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {{ user.username }}
+
+    {% if me == False %}
+
+    <form name="input" action="." method="post">
+	<input type="submit" value="{{ verb }}">
+    </form>
+
+    {% endif %}
+
+    <h2>{{ user.username }}</h2>
     {% for howl in user.howls %}
       <p>
         {{ howl.howl }}
       </p>
     {% endfor %}
+
 {% endblock %}

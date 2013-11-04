@@ -1,4 +1,4 @@
-This is Twitter clone I have put together as a demo/practice project using Flask and MongoDB.
+This is a very loose Twitter clone I have put together as a demo/practice project using Flask and MongoDB.
 
 A demo copy of the site can be found at http://howler.pyxze.com/.
 
